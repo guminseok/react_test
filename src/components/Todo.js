@@ -17,6 +17,16 @@ export default function Todo(props) {
     setEditing(false);
   }
 
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
+  const wasEditing = usePrevious(isEditing);
+
   const editingTemplate = (
     <form className="stack-small" onSubmit={handleSubmit}>
       <div className="form-group">
@@ -82,13 +92,13 @@ export default function Todo(props) {
   );
 
   useEffect(() => {
-    if (isEditing) {
+    if (!wasEditing && isEditing) {
       editFieldRef.current.focus();
-    } else {
+    }
+    if (wasEditing && !isEditing) {
       editButtonRef.current.focus();
     }
-  }, [isEditing]);//We need to refactor our approach so that focus changes only when isEditing changes from one value to another.
-
+  }, [wasEditing, isEditing]);//We need to refactor our approach so that focus changes only when isEditing changes from one value to another.
 
   return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
 }
