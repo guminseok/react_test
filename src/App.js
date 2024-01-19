@@ -1,12 +1,13 @@
-import './App.css';
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Form from "./components/Form";
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
+import './App.css';
 
 function App(props) {
   const [tasks, setTasks] = useState(props.tasks);
   const [filter, setFilter] = useState("All");
+  const listHeadingRef = useRef(null);
 
   const FILTER_MAP = {
     All: () => true,
@@ -38,6 +39,8 @@ function App(props) {
     />
   ));
 
+  const headingText = `${taskList.length} tasks remaining`;
+
   function addTask(name) {
     const newTask = { id: "id", name, completed: false };
     setTasks([...tasks, newTask]);
@@ -65,7 +68,10 @@ function App(props) {
       <div className="filters btn-group stack-exception">
         {filterList}
       </div>
-      <h2 id="list-heading">3 tasks remaining</h2>
+      {/* tabIndex="-1"を使って見出しもFocusできるようにする */}
+      <h2 id="list-heading" tabIndex="0" ref={listHeadingRef}>
+        {headingText}
+      </h2>
       <ul
         role="list"
         className="todo-list stack-large stack-exception"
