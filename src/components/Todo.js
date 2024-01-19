@@ -84,6 +84,8 @@ export default function Todo(props) {
   useEffect(() => {
     if (isEditing) {
       editFieldRef.current.focus();
+    } else {
+      editButtonRef.current.focus();
     }
   }, [isEditing]);//We need to refactor our approach so that focus changes only when isEditing changes from one value to another.
 
