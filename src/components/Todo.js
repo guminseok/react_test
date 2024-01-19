@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 export default function Todo(props) {
   const [isEditing, setEditing] = useState(false);
@@ -80,6 +80,13 @@ export default function Todo(props) {
       </div>
     </div>
   );
+
+  useEffect(() => {
+    if (isEditing) {
+      editFieldRef.current.focus();
+    }
+  }, [isEditing]);//We need to refactor our approach so that focus changes only when isEditing changes from one value to another.
+
 
   return <li className="todo">{isEditing ? editingTemplate : viewTemplate}</li>;
 }
