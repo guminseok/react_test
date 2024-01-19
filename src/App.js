@@ -5,6 +5,15 @@ import Todo from "./components/Todo";
 import './App.css';
 
 function App(props) {
+
+  function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+      ref.current = value;
+    });
+    return ref.current;
+  }
+
   const [tasks, setTasks] = useState(props.tasks);
   const [filter, setFilter] = useState("All");
   const listHeadingRef = useRef(null);
@@ -60,6 +69,14 @@ function App(props) {
     });
     setTasks(editedTaskList);
   }
+
+  const prevTaskLength = usePrevious(tasks.length);
+
+  useEffect(() => {
+    if (tasks.length - prevTaskLength === -1) {
+      listHeadingRef.current.focus();
+    }
+  }, [tasks.length, prevTaskLength]);
 
   return (
     <div className="todoapp stack-large">
